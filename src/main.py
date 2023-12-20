@@ -70,7 +70,7 @@ def instructions(): # Instructions for the game
     print("🍇 - 2.25x")
     print("🍉 - 2.50x")
     print("🔔 - 2.75x")
-    print("7 - 3.00x")
+    print("\033[31m77\033[0m - 3.00x")
     
     # Explain the Stats
     print("\nStats:")
@@ -110,7 +110,6 @@ def play():
     
     return money
     
-
 def main():
     start()
     money = play()
@@ -121,24 +120,28 @@ def main():
     
     # Start the game
     clear()
-    while (player.balance) > 0.:
-        
+    while (player.balance) > 0:   
         bet = 0
-        while bet <= 0:
+        while bet >= 0:
             try:
                 bet = float(input("How much do you want to bet? "))
+
                 if bet <= 0:
                     print("Invalid input. Try again.")
                     continue
+                
                 elif bet > player.balance:
                     print(f"Your balance is {player.balance}")
                     print("You don't have enough money to bet that much. Try again.")
+                    bet = 0
                     continue
                 else:
                     break
+                
             except ValueError:
                 print("Invalid input. Try again.")
                 continue
+            
         clear()
         
         slot_machine.spin(bet)

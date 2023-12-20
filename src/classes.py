@@ -158,7 +158,7 @@ class SlotSymbols:
         "grapes": "🍇",
         "watermelon": "🍉",
         "bell": "🔔",
-        "seven": TerminalColors.color("7", "red"),
+        "seven": TerminalColors.color("77", "red"),
     }
 
     @classmethod
@@ -186,7 +186,10 @@ class SlotMachine:
         for i in range(3):
             for j in range(3):
                 print(SlotSymbols.symbol(self.__slots[i][j]), end=" ")
-            print()
+                if j == 2:
+                    print()
+                else:
+                    print("|", end=" ") 
     
     def check(self):
         for i in range(3):
@@ -234,7 +237,6 @@ class SlotMachine:
         self.__player.stop_session()
         self.__player.stats()
         self.__player.reset()
-
 
 def main():
     P = player(1000)
