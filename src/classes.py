@@ -104,7 +104,8 @@ class player():
             self.stop_session()  # Stop session if not already stopped
 
         if self.__bets > 0:
-            print(f"Balance: {self.__balance}")
+            print("\nBasic stats:\n")
+            print(f"Starting balance: {self.__deposit}")
             print(f"Bets: {self.__bets}")
             print(f"Wins: {self.__wins}")
             print(f"Losses: {self.__loss}")
@@ -112,11 +113,10 @@ class player():
             print(f"Winnings: {self.__winnings}")
             print(f"Time played: {self.__stop_time - self.__start_time} seconds")
 
-            print("Advanced stats:")
+            print("\nAdvanced stats:\n")
             # Percentages
             print(f"Win rate: {(self.__wins / self.__bets) * 100}%")
             print(f"Loss rate: {(self.__loss / self.__bets) * 100}%")
-            
             print(f"Average winnings: {(self.__winnings / self.__bets) }")
             print(f"Average losses: {self.__losses / self.__bets}")
             print(f"Return on investment: {(self.__winnings - self.__losses) / self.__bets}")
@@ -132,7 +132,6 @@ class player():
         self.__balance = 0
         self.__start_time = time.time()
         self.__stop_time = time.time()
-
 
 class TerminalColors:
     COLORS = {
@@ -170,48 +169,48 @@ class SlotMachine:
     def __init__(self, player):
         self.__player = player
         self.__symbols = ["cherry", "lemon", "orange", "apple", "grapes", "watermelon", "bell", "seven"]
-        self.__slots = [None, None, None]
+        self.__slots = [[None, None, None], [None, None, None], [None, None, None]]
         # Can convert the above to a 3x3 matrix to make it look like a slot machine
         # If so, then need to change these methods: spin, display, check, reset
 
     def spin(self, bet):
         self.__player.inc_bet()
-        # Change logic here to make it look like a slot machine
-        for i in range(len(self.__slots)):
-            self.__slots[i] = random.choice(self.__symbols)
+        for i in range(3): 
+            for j in range(3):
+                self.__slots[i][j] = random.choice(self.__symbols)
         self.display()
         self.payout(bet)
         self.reset()
     
-    # Change logic here to make it look like a slot machine
     def display(self):
-        for slot in self.__slots:
-            print(SlotSymbols.symbol(slot), end=" ")
-        print()
+        for i in range(3):
+            for j in range(3):
+                print(SlotSymbols.symbol(self.__slots[i][j]), end=" ")
+            print()
     
     def check(self):
-        # Change logic here to make it look like a slot machine
-        if self.__slots[0] == self.__slots[1] == self.__slots[2]:
-            win_percentage = 2
-            if self.__slots[0] == "cherry":
-                win_percentage +=.05
-            elif self.__slots[0] == "lemon":
-                win_percentage +=.1
-            elif self.__slots[0] == "orange":
-                win_percentage +=.2
-            elif self.__slots[0] == "apple":
-                win_percentage +=.15
-            elif self.__slots[0] == "grapes":
-                win_percentage +=.25
-            elif self.__slots[0] == "watermelon":
-                win_percentage +=.50
-            elif self.__slots[0] == "bell":
-                win_percentage +=.75
-            elif self.__slots[0] == "seven":
-                win_percentage +=1
-            return win_percentage
-        else:
-            return 0
+        for i in range(3):
+            if self.__slots[i][0] == self.__slots[i][1] == self.__slots[i][2]:
+                win_percentage = 2
+                if self.__slots[i][0] == "cherry":
+                    win_percentage +=.05
+                elif self.__slots[i][0] == "lemon":
+                    win_percentage +=.1
+                elif self.__slots[i][0] == "orange":
+                    win_percentage +=.2
+                elif self.__slots[i][0] == "apple":
+                    win_percentage +=.15
+                elif self.__slots[i][0] == "grapes":
+                    win_percentage +=.25
+                elif self.__slots[i][0] == "watermelon":
+                    win_percentage +=.50
+                elif self.__slots[i][0] == "bell":
+                    win_percentage +=.75
+                elif self.__slots[i][0] == "seven":
+                    win_percentage +=1
+                return win_percentage        
+        
+        return 0
         
     def payout(self, bet):
         check = self.check()
@@ -225,10 +224,11 @@ class SlotMachine:
             self.__player.inc_losses(bet)
             self.__player.dec_balance(bet)
             print(f"You lost {bet}!")
+        print()
 
     # Change logic here to make it look like a slot machine
     def reset(self):
-        self.__slots = [None, None, None]
+        self.__slots = [[None, None, None], [None, None, None], [None, None, None]]
     
     def quit(self):
         self.__player.stop_session()

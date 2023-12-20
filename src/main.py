@@ -11,21 +11,44 @@ def clear():
 
 def start(): # Start the game
     clear()
-    print("Welcome to the game of Slots!")
-    print("You will first deposit money into your account.")
-    print("Then you will place a bet.")
-    print("Then you will spin the slots.")
-    print("Do you wanna play or read instructions?")
-    print("1. Play")
-    print("2. Instructions")
-    choice = input("Enter your choice: ")
-    if choice == "1":
-        return
-    elif choice == "2":
-        instructions()
-    else:
-        print("Invalid choice. Try again.")
-        start()
+    while True:
+        print("Welcome to the game of Slots!")
+        print("\nYou will first deposit money into your account.")
+        print("Then you will place a bet.")
+        print("Then you will spin the slots.")
+        print("\nDo you wanna play or read instructions?")
+        print("1. Play")
+        print("2. Instructions")
+        choice = input("Enter your choice: ")
+        if choice == "1":
+            return
+        elif choice == "2":
+            while True:
+                instructions()
+                choice = input("Enter your choice: ")
+                if choice == "1":
+                    return
+                elif choice == "2":
+                    continue
+                else:
+                    print("Invalid choice. Try again.")
+                    continue
+        else:
+            print("Invalid choice. Try again.")
+            start()
+            try:
+                choice = int(input("Do you want to play or see the instructions? (1/2) "))
+                if choice == 1:
+                    break
+                elif choice == 2:
+                    instructions()
+                    break
+                else:
+                    print("Invalid choice. Try again.")
+                    continue
+            except ValueError:
+                print("Invalid input. Try again.")
+                continue
 
 def instructions(): # Instructions for the game
     clear()
@@ -33,6 +56,7 @@ def instructions(): # Instructions for the game
     print("Then you will place a bet.")
     print("Then you will spin the slots.")
     print("If you get three of the same symbols, you win!")
+    
     # Show Example
     print("\nExample:")
     print("🍒 🍒 🍒")
@@ -58,7 +82,6 @@ def instructions(): # Instructions for the game
     print("Balance - How much money you have lost")
     print("Time Played - How long you have played")
 
-    
     # Explain the Advanced Stats
     print("\nAdvanced Stats:")
     print("Win Percentage - How often you win")
@@ -70,25 +93,20 @@ def instructions(): # Instructions for the game
     print("\nDo you wanna play or quit?")
     print("1. Play")
     print("2. Quit")
-    choice = input("Enter your choice: ")
-    if choice == "1":
-        return
-    elif choice == "2":
-        quit()
-    else:
-        print("Invalid choice. Try again.")
-        instructions()
- 
-    
     
 def play():
     clear()
-    # Ask the user for their money
-    money = int(input("How much money do you want to deposit? "))
-    # Check if the money is valid
-    if money < 5:
-        print("Invalid amount. Try again.")
-        play()
+    while True:
+        try:
+            money = int(input("How much money do you want to deposit? "))
+            if money <= 0:
+                print("Invalid input. Try again.")
+                continue
+            else:
+                break
+        except ValueError:
+            print("Invalid input. Try again.")
+            continue
     
     return money
     
@@ -96,35 +114,69 @@ def play():
 def main():
     start()
     money = play()
+    
     # Create objects
     player = c.player(money)
     slot_machine = c.SlotMachine(player)
     
     # Start the game
     clear()
-    while (player.balance) >= 5:
-        bet = int(input("How much do you want to bet? "))
-        if bet > player.balance:
-            print(f"Your balance is {player.balance}")
-            print("You don't have enough money to bet that much. Try again.")
-            continue
+    while (player.balance) > 0.:
+        
+        bet = 0
+        while bet <= 0:
+            try:
+                bet = float(input("How much do you want to bet? "))
+                if bet <= 0:
+                    print("Invalid input. Try again.")
+                    continue
+                elif bet > player.balance:
+                    print(f"Your balance is {player.balance}")
+                    print("You don't have enough money to bet that much. Try again.")
+                    continue
+                else:
+                    break
+            except ValueError:
+                print("Invalid input. Try again.")
+                continue
         clear()
+        
         slot_machine.spin(bet)
         print(f"Your balance is {player.balance}")
+        
         if player.balance <= 0:
             print("You don't have any money left. Game over.")
             slot_machine.quit()
             break
-        choice = input("Do you want to play again? (y/n) ")
+        
+        choice = ""
+        while choice != "y" and choice != "n":
+            try:
+                choice = input("Do you want to play again? (y/n) ")
+                if choice == "n":
+                    slot_machine.quit()
+                    print("Thanks for playing!")
+                    break
+                elif choice == "y":
+                    continue
+                else:
+                    print("Invalid choice. Try again.")
+                    continue
+            except ValueError:
+                print("Invalid input. Try again.")
+                continue
+            
         if choice == "n":
             slot_machine.quit()
             print("Thanks for playing!")
             break
+        
         elif choice == "y":
             continue
+        
         else:
             print("Invalid choice. Try again.")
-            continue
+            continue    
 
 if __name__ == "__main__":
     main()
